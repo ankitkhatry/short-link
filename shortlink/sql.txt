@@ -1,0 +1,29 @@
+-- Create database
+CREATE DATABASE link_shortener;
+USE link_shortener;
+
+-- Create table to store URLs
+CREATE TABLE urls (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    original_url TEXT NOT NULL,
+    short_code VARCHAR(10) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NULL
+);
+
+-- Create an index for quick lookup
+CREATE INDEX idx_short_code ON urls (short_code);
+
+-- Insert a test record
+INSERT INTO urls (original_url, short_code, expires_at)
+VALUES ('https://example.com', 'abc123', DATE_ADD(NOW(), INTERVAL 1 HOUR));
+
+-- Retrieve all records
+SELECT * FROM urls;
+
+-- Retrieve a specific URL by short code
+SELECT original_url FROM urls WHERE short_code = 'abc123';
+
+-- Delete expired links
+DELETE FROM urls WHERE expires_at < NOW();
+
